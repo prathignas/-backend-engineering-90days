@@ -79,17 +79,37 @@ import(
 	"fmt"
 	"strings"
 	"os"
+	"sort"
 )
 
-func wordcount(s string) map[string]int{
+type WordCount struct{
+	Word string
+	Count int
+}
+
+func wordcount(s string) []WordCount{
     words := strings.Fields(s)
 
 	counts := make(map[string]int)
 
 	for _,word:=range words{
+		word =strings.ToLower(word)
 		counts[word]++
 	}
-	return counts
+
+	var wordcounts []WordCount
+	for word,count := range counts{
+         wc := WordCount{
+          Word:word,
+		  Count:count,
+		 }
+		 wordcounts=append(wordcounts,wc)
+	}
+
+	sort.Slice(wordcounts,func(i,j int)bool{
+		return wordcounts[i].Count > wordcounts[j].Count
+	})
+	return wordcounts
 }
 
 func main(){
@@ -101,5 +121,9 @@ func main(){
 	}
 
 	result:=wordcount(string(data))
-	fmt.Println(result)
+	
+	for i:=0 ; i<5 && i<len(result);i++ {
+		fmt.Printf("%s %d\n",result[i].Word,result[i].Count)
+	}
+	
 }
