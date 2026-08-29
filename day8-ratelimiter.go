@@ -1,11 +1,11 @@
+var counts = make(map[string]int) // userID -> count
 
-var count = 0
-func  handler(w http.ResponseWriter, r *http.Request) {
-  count++
-
-  if count<100 {
-	fmt.Fprintln(w,"allow")
-  }else{
-    fmt.Fprintln(w,"reject")
-  }
+func handler(w http.ResponseWriter, r *http.Request) {
+    userID := r.URL.Query().Get("user")
+    counts[userID]++
+    if counts[userID] > 100 {
+        fmt.Fprintln(w, "Blocked")
+    } else {
+        fmt.Fprintln(w, "Allowed")
+    }
 }
