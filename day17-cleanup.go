@@ -103,7 +103,7 @@ func (p *OutboxPoller) Start(){
 }
 
 func (p *OutboxPoller) StartCleanup() {
-    ticker := time.NewTicker(10 * time.Second)
+    ticker := time.NewTicker(60 * time.Second)
     go func() {
         for {
             select {
@@ -111,7 +111,7 @@ func (p *OutboxPoller) StartCleanup() {
                 ticker.Stop()
                 return
             case <-ticker.C:
-                removed := p.store.Cleanup(5 * time.Second)
+                removed := p.store.Cleanup(1 * time.Hour)
                 if removed > 0 {
                     fmt.Printf("cleanup removed %d old messages\n", removed)
                 }
